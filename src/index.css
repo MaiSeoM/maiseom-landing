@@ -1,0 +1,13 @@
+@import "tailwindcss";
+
+:root { color-scheme: light; }
+html, body, #root { height: 100%; }
+
+body {
+  background: #ffffff;
+  color: #0F172A;
+  font-family: "Plus Jakarta Sans", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+}
+
+/* Animation douce pour l'image hero */
+@keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-6px)} }
