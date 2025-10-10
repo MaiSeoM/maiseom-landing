@@ -1,7 +1,7 @@
 import { Routes, Route, Outlet } from "react-router-dom";
 import { useEffect } from "react";
 
-import Header from "./components/header.jsx";
+import Header from "./components/Header.jsx";
 import Footer from "./components/Footer.jsx";
 import CookieBanner from "./components/CookieBanner.jsx";
 import StickyCTA from "./components/StickyCTA.jsx";
