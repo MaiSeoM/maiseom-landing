@@ -1,0 +1,22 @@
+{
+  "name": "MaiSeoM",
+  "short_name": "MaiSeoM",
+  "description": "Optimisez votre SEO pour l’ère de l’IA. Audit, recommandations et suivi intelligent.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#1f4ed8",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "48x48 64x64 96x96 128x128 256x256",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "/og-cover.jpg",
+      "sizes": "1200x630",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    }
+  ]
+}

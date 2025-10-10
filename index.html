@@ -1,46 +1,56 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="fr">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>MaiSeoM — SEO & IA-SEO en 1 clic</title>
-    <meta name="description" content="MaiSeoM analyse votre site et propose des optimisations SEO + IA-SEO avec corrections automatiques et intégrations WordPress/Shopify/Webflow." />
+    <!-- ======= MÉTADONNÉES DE BASE ======= -->
+    <title>MaiSeoM — Optimisez votre SEO pour l’ère de l’IA 🚀</title>
+    <meta
+      name="description"
+      content="Analyse automatique, optimisations IA-SEO prêtes pour Google SGE, ChatGPT et Perplexity. Un clic pour rester visible et convertir plus."
+    />
+    <link rel="canonical" href="https://www.maiseom.com/" />
 
-    <!-- Open Graph -->
-    <meta property="og:title" content="MaiSeoM — SEO & IA-SEO en 1 clic" />
-    <meta property="og:description" content="Optimisez votre visibilité sur Google et dans les réponses d’IA. Corrections automatiques, intégrations CMS, rapports clairs." />
-    <meta property="og:image" content="/hero.png" />
-    <meta property="og:url" content="https://maiseom.com" />
+    <!-- ======= FAVICON & MANIFEST ======= -->
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="manifest" href="/manifest.webmanifest">
+
+    <!-- ======= OPEN GRAPH (Facebook, LinkedIn...) ======= -->
+    <meta property="og:site_name" content="MaiSeoM" />
     <meta property="og:type" content="website" />
+    <meta property="og:title" content="MaiSeoM — Optimisez votre SEO pour l’ère de l’IA 🚀" />
+    <meta
+      property="og:description"
+      content="Optimisations IA-SEO prêtes pour SGE & ChatGPT. Simple, automatique, efficace."
+    />
+    <meta property="og:url" content="https://www.maiseom.com/" />
+    <meta property="og:image" content="https://www.maiseom.com/og-cover.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
 
-    <!-- Twitter -->
+    <!-- ======= TWITTER CARD ======= -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="MaiSeoM — SEO & IA-SEO en 1 clic" />
-    <meta name="twitter:description" content="Optimisez votre visibilité sur Google et dans les réponses d’IA." />
-    <meta name="twitter:image" content="/hero.png" />
+    <meta name="twitter:title" content="MaiSeoM — Optimisez votre SEO pour l’ère de l’IA 🚀" />
+    <meta
+      name="twitter:description"
+      content="Optimisations IA-SEO prêtes pour SGE & ChatGPT. Un clic pour rester visible."
+    />
+    <meta name="twitter:image" content="https://www.maiseom.com/og-cover.jpg" />
 
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" href="/maiseom-logo.png" />
+    <!-- ======= COULEUR DU THÈME (MOBILE) ======= -->
+    <meta name="theme-color" content="#1f4ed8" />
 
-    <!-- Google Font: Plus Jakarta Sans -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
-    <!-- JSON-LD: Organization -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Organization",
-      "name": "MaiSeoM",
-      "url": "https://maiseom.com",
-      "logo": "https://maiseom.com/maiseom-logo.png",
-      "sameAs": []
-    }
-    <script defer data-domain="maiseom.com" src="https://plausible.io/js/script.js"></script>
+    <!-- ======= POLICE ======= -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
   </head>
-  <body>
+
+  <body class="bg-gray-50 text-gray-900 font-inter">
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>

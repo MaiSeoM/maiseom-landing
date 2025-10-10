@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="60" viewBox="0 0 200 60">
+  <defs>
+    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#9333ea;stop-opacity:1"></stop>
+      <stop offset="100%" style="stop-color:#ec4899;stop-opacity:1"></stop>
+    </linearGradient>
+  </defs>
+  <rect width="200" height="60" fill="white"></rect>
+  <circle cx="40" cy="30" r="18" fill="url(#grad1)"></circle>
+  <text x="70" y="37" font-family="Trebuchet MS, sans-serif" font-size="26" fill="#333">AuroraSoft</text>
+</svg>

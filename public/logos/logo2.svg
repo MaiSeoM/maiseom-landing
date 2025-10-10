@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 80" width="200" height="80">
+  <rect width="200" height="80" fill="white"></rect>
+  <!-- Icône feuille -->
+  <path d="M35 55 C30 30, 55 20, 70 50 C55 60, 45 70, 35 55 Z" fill="#28a745"></path>
+  <path d="M35 55 C48 45, 60 40, 70 35" fill="none" stroke="#1f7a34" stroke-width="2" stroke-linecap="round"></path>
+  <!-- Texte -->
+  <text x="90" y="52" font-family="Verdana, Arial, sans-serif" font-size="20" fill="#333">GreenFlow</text>
+</svg>
