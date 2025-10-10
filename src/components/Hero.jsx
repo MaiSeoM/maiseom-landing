@@ -43,9 +43,11 @@ export default function Hero() {
 
           <MotionItem delay={0.08}>
             <p className="mt-6 text-lg md:text-xl text-gray-600 max-w-2xl">
-              Analyse automatique, optimisations IA-SEO prêtes pour Google SGE,
-              ChatGPT, Perplexity & co. <br />
-              <strong className="text-gray-900">Un seul clic suffit</strong> pour rester visible et convertir plus.
+              MaiSeoM permet de faire l'Analyse et l'optimisations IA-SEO automatique prêtes pour Google SGE,
+              ChatGPT, Perplexity & co.<br/>
+              <br />
+              <strong className="text-gray-900">Un seul clic suffit</strong> pour rester visible et convertir plus.<br/>
+              Ce qui vous offre un vrai <strong className="text-gray-900">gain de temps et d'energie !</strong>
             </p>
           </MotionItem>
 

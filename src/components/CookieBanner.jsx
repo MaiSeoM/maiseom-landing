@@ -67,7 +67,16 @@ export default function CookieBanner() {
   if (!show) return null;
 
   return (
-    <div className="fixed inset-x-0 bottom-4 z-50 px-4">
+    <div
+      className="
+        fixed inset-x-0 bottom-4 md:bottom-8
+        z-[900] px-4
+        md:mr-40  /* espace pour éviter le StickyCTA en bas-droite */
+      "
+      role="dialog"
+      aria-live="polite"
+      aria-label="Bannière de consentement aux cookies"
+    >
       <div className="mx-auto max-w-3xl rounded-2xl border border-gray-200 bg-white/90 backdrop-blur p-5 shadow-2xl">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div>
@@ -76,6 +85,7 @@ export default function CookieBanner() {
               Nous utilisons des cookies pour mesurer l’audience et, si vous l’acceptez,
               activer des fonctionnalités marketing. Vous pouvez personnaliser votre choix.
             </p>
+
             {customizing && (
               <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {/* Mesure d’audience */}
@@ -93,6 +103,7 @@ export default function CookieBanner() {
                     </div>
                   </div>
                 </label>
+
                 {/* Marketing */}
                 <label className="flex items-start gap-3 rounded-lg border border-gray-200 p-3">
                   <input
@@ -110,6 +121,7 @@ export default function CookieBanner() {
                 </label>
               </div>
             )}
+
             <p className="mt-2 text-xs text-gray-500">
               Vous pouvez modifier votre choix à tout moment :{" "}
               <button
@@ -118,8 +130,10 @@ export default function CookieBanner() {
               >
                 personnaliser
               </button>{" "}
-              · <a href="/privacy" className="underline underline-offset-2 hover:text-blue-700">politique cookies</a>
-
+              ·{" "}
+              <a href="/privacy" className="underline underline-offset-2 hover:text-blue-700">
+                politique cookies
+              </a>
             </p>
           </div>
 
@@ -130,6 +144,7 @@ export default function CookieBanner() {
             >
               Tout refuser
             </button>
+
             {customizing ? (
               <button
                 onClick={saveCustom}

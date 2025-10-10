@@ -1,3 +1,4 @@
+// src/components/Header.jsx
 import { useEffect, useRef, useState } from "react";
 import { trackEvent } from "../lib/analytics.js";
 import { Link } from "react-router-dom";
@@ -8,7 +9,7 @@ export default function Header() {
   const [open, setOpen] = useState(null); // "benefits" | "pricing" | "resources" | null
   const wrapRef = useRef(null);
 
-  // Close on outside / Esc
+  // Close dropdowns on outside / Esc
   useEffect(() => {
     function onClick(e) {
       if (!wrapRef.current) return;
@@ -32,12 +33,12 @@ export default function Header() {
       {/* barre verre minimaliste */}
       <div className="backdrop-blur-xl bg-white/65 border-b border-white/60">
         <div ref={wrapRef} className="mx-auto max-w-7xl px-6 h-18 md:h-20 flex items-center justify-between">
-          {/* Logo + marque sobre */}
-          <a href="/" className="flex items-center gap-3 group">
+          {/* Logo + marque */}
+          <Link to="/" className="flex items-center gap-3 group">
             <div className="p-[1.5px] rounded-xl" style={{ background: BRAND_GRADIENT }}>
               <div className="bg-white rounded-xl px-2 py-1">
                 <img
-                  src="logos/maiseom-logo.png"             // place ton logo dans public/logo.png
+                  src="/logos/maiseom-logo.png"
                   alt="MaiSeoM"
                   className="h-10 w-auto md:h-12"
                 />
@@ -48,9 +49,9 @@ export default function Header() {
                 MaiSeoM
               </span>
             </span>
-          </a>
+          </Link>
 
-          {/* Desktop nav – sobre & premium */}
+          {/* Desktop nav */}
           <nav className="hidden md:flex items-center gap-2">
             <DropItem
               label="Avantages"
@@ -76,20 +77,14 @@ export default function Header() {
               <Panel>
                 <PlansPreview />
                 <div className="px-5 pb-5 pt-3 text-right">
-                  <a
-                    href="#pricing"
-                    className="inline-flex items-center px-1 py-1 rounded-lg font-semibold text-white shadow-sm hover:opacity-90 transition"
+                  <Link
+                    to="/tarifs"
+                    onClick={() => trackEvent?.("nav_click", { item: "offres" })}
+                    className="inline-flex items-center px-4 py-2 rounded-lg font-semibold text-white shadow-sm hover:opacity-90 transition"
                     style={{ backgroundImage: BRAND_GRADIENT }}
-                    onClick={() => trackEvent("nav_click", { item: "offres" })}
                   >
-                    <Link
-                to="/tarifs"
-                className="h-14 px-4 rounded-xl font-semibold text-indigo-700 border border-indigo-20 bg-white shadow-sm transition-all hover:border-indigo-400 hover:text-indigo-900 hover:shadow-md flex items-center justify-center"
-              >
-                Comprendre nos offres
-              </Link>
-
-                  </a>
+                    Comprendre nos offres
+                  </Link>
                 </div>
               </Panel>
             </DropItem>
@@ -109,16 +104,13 @@ export default function Header() {
             </DropItem>
 
             {/* CTA discret */}
-            <a
-              href="#pricing"
+            <Link
+              to="/tarifs"
               className="ml-2 inline-flex items-center px-4 py-2 rounded-xl font-semibold text-white shadow-sm hover:opacity-90 transition"
               style={{ backgroundImage: BRAND_GRADIENT }}
             >
-              <Link to="/tarifs" className="hover:text-indigo-600 transition">
-                 Offres
-              </Link>
-
-            </a>
+              Offres
+            </Link>
           </nav>
 
           {/* Mobile */}
@@ -129,7 +121,7 @@ export default function Header() {
   );
 }
 
-/* ============ sous-composants sobres & premium ============ */
+/* ========= sous-composants ========= */
 
 function Chevron({ open }) {
   return (
@@ -209,9 +201,9 @@ function Stat({ title, note }) {
 
 function PlansPreview() {
   const plans = [
-    { name: "Starter", price: "19€", bullets: ["5 pages", "Reco basiques"] },
-    { name: "Pro", price: "49€", bullets: ["Illimité", "Reco avancées", "Alertes+PDF"], featured: true },
-    { name: "Entreprise", price: "99€", bullets: ["Tout Pro", "Support prioritaire", "API"] },
+    { name: "Starter", price: "19€", bullets: ["Audits 5 pages", "Recommandations basiques"] },
+    { name: "Pro", price: "49€", bullets: ["Audits Illimité", "Recommandations avancées", "Alertes+PDF"], featured: true },
+    { name: "Entreprise", price: "99€", bullets: ["Plan Pro +", "Support prioritaire", "API"] },
   ];
   return (
     <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -236,6 +228,8 @@ function PlansPreview() {
 
 function MobileMenu() {
   const [open, setOpen] = useState(false);
+
+  // Esc pour fermer
   useEffect(() => {
     function onKey(e) {
       if (e.key === "Escape") setOpen(false);
@@ -243,8 +237,10 @@ function MobileMenu() {
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, []);
+
   return (
     <div className="md:hidden">
+      {/* Bouton burger */}
       <button
         onClick={() => setOpen(!open)}
         aria-expanded={open}
@@ -253,26 +249,47 @@ function MobileMenu() {
       >
         <span className="sr-only">Ouvrir le menu</span>☰
       </button>
-      {/* sheet mobile */}
-      <div className={`fixed inset-0 z-50 transition ${open ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}`}>
-        <div className="absolute inset-0 bg-black/40" onClick={() => setOpen(false)} />
-        <div className={`absolute right-0 top-0 h-full w-[85%] max-w-sm bg-white shadow-2xl p-6 transition-transform ${open ? "translate-x-0" : "translate-x-full"}`}>
+
+      {/* Overlay + panel mobile */}
+      <div className={`fixed inset-0 z-50 ${open ? "pointer-events-auto" : "pointer-events-none"}`}>
+        {/* Overlay semi-opaque */}
+        <div
+          className={`absolute inset-0 transition-opacity ${open ? "opacity-100" : "opacity-0"}`}
+          style={{ backgroundColor: "rgba(0,0,0,0.4)" }}
+          onClick={() => setOpen(false)}
+        />
+
+        {/* Panel blanc premium */}
+        <div
+          className={`absolute right-0 top-0 h-full w-[85%] max-w-sm bg-white/95 backdrop-blur-md shadow-2xl p-6 transition-transform
+                      ${open ? "translate-x-0" : "translate-x-full"}`}
+        >
           <div className="flex items-center justify-between">
             <span className="font-extrabold text-lg">Menu</span>
-            <button onClick={() => setOpen(false)} className="h-9 w-9 rounded-lg bg-gray-100">✕</button>
+            <button onClick={() => setOpen(false)} className="h-9 w-9 rounded-lg bg-gray-100" title="Fermer">
+              ✕
+            </button>
           </div>
+
           <nav className="mt-6 space-y-4">
-            <a href="#benefits" className="block font-semibold text-gray-900">Avantages</a>
-            <a href="#pricing" className="block font-semibold text-gray-900">Tarifs</a>
-            <a href="#faq" className="block font-semibold text-gray-900">Ressources / FAQ</a>
-            <a
-              href="#pricing"
+            <a href="#benefits" onClick={() => setOpen(false)} className="block font-semibold text-gray-900">
+              Avantages
+            </a>
+            <a href="#pricing" onClick={() => setOpen(false)} className="block font-semibold text-gray-900">
+              Tarifs
+            </a>
+            <a href="#faq" onClick={() => setOpen(false)} className="block font-semibold text-gray-900">
+              Ressources / FAQ
+            </a>
+
+            <Link
+              to="/tarifs"
+              onClick={() => setOpen(false)}
               className="mt-4 inline-flex items-center justify-center w-full px-5 py-3 rounded-xl font-semibold text-white shadow-sm"
               style={{ backgroundImage: BRAND_GRADIENT }}
-              onClick={() => setOpen(false)}
             >
               Voir les offres
-            </a>
+            </Link>
           </nav>
         </div>
       </div>

@@ -1,14 +1,22 @@
+// src/components/Pricing.jsx
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { trackEvent } from "../lib/analytics.js";
 import { Link } from "react-router-dom";
+import ModalWaitlist from "./ModalWaitlist.jsx";
+
+const brandGrad = "linear-gradient(90deg,#2066CC 0%,#8C52FF 100%)";
 
 export default function Pricing() {
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedPlan, setSelectedPlan] = useState("Pro");
+
   const plans = [
     {
       name: "Starter",
       price: 19,
       period: "/mois",
-      bullets: ["Audit 5 pages", "Recomandation IA basiques", "Export CSV"],
+      bullets: ["5 Audits/mois ", "Recommandations IA basiques", "Export CSV"],
       cta: "Choisir Starter",
       featured: false,
     },
@@ -18,9 +26,9 @@ export default function Pricing() {
       period: "/mois",
       bullets: [
         "Audit illimité",
-        "Recomandation IA avancées",
-        "Correction automatique IA-SEO", 
-        "Alertes email + PDF",
+        "Recommandations IA avancées",
+        "Correction automatique IA-SEO",
+        "Alertes e-mail + PDF",
         "Schema.org assisté",
       ],
       cta: "Choisir Pro",
@@ -31,13 +39,28 @@ export default function Pricing() {
       name: "Entreprise",
       price: 99,
       period: "/mois",
-      bullets: ["Tout Pro", "Support prioritaire", "Intégrations & API", "Conçu pour une utilisation MULTI-SITE"],
+      bullets: [
+        "Tout le plan Pro",
+        "Support prioritaire",
+        "Intégrations & API",
+        "Conçu pour une utilisation MULTI-SITE",
+      ],
       cta: "Contacter l’équipe",
       featured: false,
       prefix: "À partir de",
       badge: "Sur mesure",
     },
   ];
+
+  function openModal(planName) {
+    setSelectedPlan(planName);
+    localStorage.setItem("maiseom_selected_plan", planName);
+    trackEvent?.("pricing_intent", {
+      plan: planName,
+      source: "home_pricing",
+    });
+    setModalOpen(true);
+  }
 
   return (
     <section
@@ -117,7 +140,9 @@ export default function Pricing() {
                       <span className="text-4xl font-extrabold">
                         {new Intl.NumberFormat("fr-FR").format(p.price)}€
                       </span>
-                      <span className="text-sm text-gray-600">HT{p.period}</span>
+                      <span className="text-sm text-gray-600">
+                        HT{p.period}
+                      </span>
                     </div>
                   </div>
 
@@ -128,27 +153,19 @@ export default function Pricing() {
                     ))}
                   </ul>
 
-                  {/* CTA */}
-                  <a
-                    href="#waitlist"
-                    onClick={() => {
-                      localStorage.setItem("maiseom_selected_plan", p.name);
-                      trackEvent?.("pricing_intent", {
-                        plan: p.name,
-                        price: p.price,
-                        period: "mois",
-                        currency: "EUR",
-                      });
-                    }}
+                  {/* CTA → ouvre la modale d’intention */}
+                  <button
+                    type="button"
+                    onClick={() => openModal(p.name)}
                     className="mt-6 w-full inline-flex items-center justify-center px-5 py-2.5 rounded-xl font-semibold text-white shadow-md transition hover:opacity-90"
                     style={{
                       backgroundImage: p.featured
-                        ? "linear-gradient(90deg,#2066CC 0%,#8C52FF 100%)"
+                        ? brandGrad
                         : "linear-gradient(90deg,#6B7280 0%,#9CA3AF 100%)",
                     }}
                   >
                     {p.cta}
-                  </a>
+                  </button>
 
                   {p.featured && (
                     <p className="mt-3 text-xs text-center text-gray-500">
@@ -164,17 +181,28 @@ export default function Pricing() {
         <p className="mt-8 text-center text-xs text-gray-500">
           Prix <b>HT</b>, TVA applicable. Sans engagement. Annulation en 1 clic.
         </p>
+
+        {/* Bouton vers la page tarifs — responsive propre */}
         <div className="mt-12 text-center">
-        <Link
-          to="/tarifs"
-          className="inline-block px-50 py-4 rounded-xl font-semibold text-white shadow-lg transition-all hover:scale-[1.05] hover:shadow-xl"
-          style={{ backgroundImage: "linear-gradient(90deg,#2066CC 0%,#8C52FF 100%)" }}
-         >
-         Voir le détail de nos offres
-      </Link>
+          <Link
+            to="/tarifs"
+            className="inline-block rounded-xl font-semibold text-white shadow-lg transition-all hover:scale-[1.05] hover:shadow-xl
+                       px-4 py-2 text-sm
+                       sm:px-5 sm:py-2.5 sm:text-base
+                       md:px-6 md:py-3 md:text-lg"
+            style={{ backgroundImage: brandGrad }}
+          >
+            Voir le détail de nos offres
+          </Link>
         </div>
       </div>
+
+      {/* Modale d’intention (même que /tarifs) */}
+      <ModalWaitlist
+        open={modalOpen}
+        onClose={() => setModalOpen(false)}
+        planDefault={selectedPlan}
+      />
     </section>
-    
   );
 }
