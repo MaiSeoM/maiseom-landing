@@ -1,3 +1,5 @@
+import FreeAuditEntry from "./FreeAuditEntry.jsx";
+
 export default function CTA() {
   return (
     <section className="relative py-20 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-white text-center">
@@ -14,8 +16,9 @@ export default function CTA() {
           href="#waitlist"
           className="inline-flex items-center px-8 py-3 rounded-full bg-white text-indigo-700 font-semibold shadow-lg hover:bg-gray-100 transition"
         >
-          🚀 Rejoindre la liste d’attente
+          🚀 Commencer à générer plus de chiffre grace à MaiSeoM
         </a>
+        <FreeAuditEntry location="footer_cta" />
       </div>
     </section>
   );

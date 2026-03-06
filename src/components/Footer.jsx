@@ -34,6 +34,10 @@ export default function Footer() {
                 <Link to="/#hero" className="hover:text-white transition">Accueil</Link>
               </li>
               <li>
+                {/* Audit Gratuit */}
+                <Link to="/audit/free" className="hover:text-white transition">Audit Gratuit</Link>
+              </li>
+              <li>
                 {/* Tarifs (page dédiée) */}
                 <Link to="/tarifs" className="hover:text-white transition">Tarifs</Link>
               </li>
@@ -86,8 +90,8 @@ export default function Footer() {
 
         {/* Bas de page */}
         <div className="relative z-10 mt-10 pt-6 border-t border-gray-800 text-center text-sm text-gray-500">
-          © {new Date().getFullYear()} <strong className="text-white font-semibold">MaiSeoM</strong>.  
-          Tous droits réservés.
+          © {new Date().getFullYear()} <strong className="text-white font-semibold">MaiSeoM</strong> -  
+          Tous droits réservés - 60 rue François 1er, 75008 Paris
         </div>
       </footer>
 

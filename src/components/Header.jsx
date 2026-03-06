@@ -2,12 +2,14 @@
 import { useEffect, useRef, useState } from "react";
 import { trackEvent } from "../lib/analytics.js";
 import { Link } from "react-router-dom";
+import { useAuth } from "../auth/AuthContext.jsx";
 
 const BRAND_GRADIENT = "linear-gradient(90deg,#2066CC 0%,#8C52FF 100%)";
 
 export default function Header() {
   const [open, setOpen] = useState(null); // "benefits" | "pricing" | "resources" | null
   const wrapRef = useRef(null);
+  const { user } = useAuth();
 
   // Close dropdowns on outside / Esc
   useEffect(() => {
@@ -32,10 +34,16 @@ export default function Header() {
       <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(900px_260px_at_15%_-20%,rgba(32,102,204,0.08),transparent),radial-gradient(800px_240px_at_85%_120%,rgba(140,82,255,0.08),transparent)]" />
       {/* barre verre minimaliste */}
       <div className="backdrop-blur-xl bg-white/65 border-b border-white/60">
-        <div ref={wrapRef} className="mx-auto max-w-7xl px-6 h-18 md:h-20 flex items-center justify-between">
+        <div
+          ref={wrapRef}
+          className="mx-auto max-w-7xl px-6 h-18 md:h-20 flex items-center justify-between"
+        >
           {/* Logo + marque */}
           <Link to="/" className="flex items-center gap-3 group">
-            <div className="p-[1.5px] rounded-xl" style={{ background: BRAND_GRADIENT }}>
+            <div
+              className="p-[1.5px] rounded-xl"
+              style={{ background: BRAND_GRADIENT }}
+            >
               <div className="bg-white rounded-xl px-2 py-1">
                 <img
                   src="/logos/maiseom-logo.png"
@@ -45,7 +53,10 @@ export default function Header() {
               </div>
             </div>
             <span className="text-lg md:text-xl font-extrabold tracking-tight text-gray-900">
-              <span className="text-transparent bg-clip-text" style={{ backgroundImage: BRAND_GRADIENT }}>
+              <span
+                className="text-transparent bg-clip-text"
+                style={{ backgroundImage: BRAND_GRADIENT }}
+              >
                 MaiSeoM
               </span>
             </span>
@@ -60,9 +71,21 @@ export default function Header() {
             >
               <Panel>
                 <Section>
-                  <LinkRow title="Audit IA ultra-rapide" desc="Titres, metas, schémas, perfs, maillage." href="#benefits" />
-                  <LinkRow title="Optimisations IA-SEO" desc="Prêtes pour SGE, ChatGPT, Perplexity." href="#benefits" />
-                  <LinkRow title="+ CTR mesurable" desc="Mieux repris par les IA → plus de clics." href="#benefits" />
+                  <LinkRow
+                    title="Audit IA ultra-rapide"
+                    desc="Titres, metas, schémas, perfs, maillage."
+                    href="#benefits"
+                  />
+                  <LinkRow
+                    title="Optimisations IA-SEO"
+                    desc="Prêtes pour SGE, ChatGPT, Perplexity."
+                    href="#benefits"
+                  />
+                  <LinkRow
+                    title="+ CTR mesurable"
+                    desc="Mieux repris par les IA → plus de clics."
+                    href="#benefits"
+                  />
                 </Section>
                 <Divider />
                 <Stat title="+47% de CTR médian" note="sur pages optimisées (bêta)" />
@@ -96,25 +119,57 @@ export default function Header() {
             >
               <Panel>
                 <Section>
-                  <LinkRow title="Guide IA-SEO 2025" desc="Bonnes pratiques SGE & LLMs." href="#faq" />
-                  <LinkRow title="Intégrations" desc="WordPress, Shopify, statique." href="#faq" />
-                  <LinkRow title="RGPD & sécurité" desc="Conforme, export, minimisation." href="#faq" />
+                  <LinkRow
+                    title="Guide IA-SEO 2025"
+                    desc="Bonnes pratiques SGE & LLMs."
+                    href="#faq"
+                  />
+                  <LinkRow
+                    title="Intégrations"
+                    desc="WordPress, Shopify, statique."
+                    href="#faq"
+                  />
+                  <LinkRow
+                    title="RGPD & sécurité"
+                    desc="Conforme, export, minimisation."
+                    href="#faq"
+                  />
                 </Section>
               </Panel>
             </DropItem>
 
             {/* CTA discret */}
             <Link
-              to="/tarifs"
-              className="ml-2 inline-flex items-center px-4 py-2 rounded-xl font-semibold text-white shadow-sm hover:opacity-90 transition"
-              style={{ backgroundImage: BRAND_GRADIENT }}
+              to="/audit"
+              className="px-4 py-2 rounded-lg text-sm font-semibold text-gray-800 hover:bg-gray-100 transition"
             >
-              Offres
+              Audit Gratuit
             </Link>
+
+            {/* ✅ Remplace "Offres" par Connexion/Mon espace sans casser le design */}
+            {!user ? (
+              <Link
+                to="/login"
+                className="ml-2 inline-flex items-center px-4 py-2 rounded-xl font-semibold text-white shadow-sm hover:opacity-90 transition"
+                style={{ backgroundImage: BRAND_GRADIENT }}
+                onClick={() => trackEvent?.("nav_click", { item: "login" })}
+              >
+                Connexion
+              </Link>
+            ) : (
+              <Link
+                to="/app"
+                className="ml-2 inline-flex items-center px-4 py-2 rounded-xl font-semibold text-white shadow-sm hover:opacity-90 transition"
+                style={{ backgroundImage: BRAND_GRADIENT }}
+                onClick={() => trackEvent?.("nav_click", { item: "app" })}
+              >
+                Mon espace
+              </Link>
+            )}
           </nav>
 
           {/* Mobile */}
-          <MobileMenu />
+          <MobileMenu user={user} />
         </div>
       </div>
     </header>
@@ -127,9 +182,17 @@ function Chevron({ open }) {
   return (
     <svg
       className={`h-4 w-4 transition ${open ? "rotate-180" : ""}`}
-      viewBox="0 0 20 20" fill="none" aria-hidden="true"
+      viewBox="0 0 20 20"
+      fill="none"
+      aria-hidden="true"
     >
-      <path d="M6 8l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+      <path
+        d="M6 8l4 4 4-4"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
     </svg>
   );
 }
@@ -172,7 +235,9 @@ function Section({ children }) {
 }
 
 function Divider() {
-  return <div className="my-5 h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent" />;
+  return (
+    <div className="my-5 h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
+  );
 }
 
 function LinkRow({ title, desc, href }) {
@@ -183,7 +248,9 @@ function LinkRow({ title, desc, href }) {
     >
       <div className="mt-1 h-2 w-2 rounded-full bg-gray-400 group-hover:bg-blue-600 transition" />
       <div>
-        <div className="font-semibold text-gray-900 group-hover:text-blue-700">{title}</div>
+        <div className="font-semibold text-gray-900 group-hover:text-blue-700">
+          {title}
+        </div>
         <div className="text-xs text-gray-600 mt-0.5">{desc}</div>
       </div>
     </a>
@@ -210,14 +277,21 @@ function PlansPreview() {
       {plans.map((p) => (
         <div
           key={p.name}
-          className={`rounded-xl border p-3 ${p.featured ? "border-blue-400/70 bg-blue-50/60" : "border-gray-200 bg-white"} shadow-sm`}
+          className={`rounded-xl border p-3 ${
+            p.featured ? "border-blue-400/70 bg-blue-50/60" : "border-gray-200 bg-white"
+          } shadow-sm`}
         >
           <div className="flex items-center justify-between">
             <div className="font-semibold">{p.name}</div>
-            <div className={`text-sm ${p.featured ? "text-blue-700" : "text-gray-700"}`}>{p.price}/mois</div>
+            <div className={`text-sm ${p.featured ? "text-blue-700" : "text-gray-700"}`}>
+              {p.price}/mois
+            </div>
           </div>
           <div className="mt-1 text-[11px] text-gray-600">{p.bullets.join(" • ")}</div>
-          <a href="#pricing" className="mt-2 inline-flex text-[12px] font-semibold underline underline-offset-4 hover:text-blue-700">
+          <a
+            href="#pricing"
+            className="mt-2 inline-flex text-[12px] font-semibold underline underline-offset-4 hover:text-blue-700"
+          >
             Détails
           </a>
         </div>
@@ -226,7 +300,7 @@ function PlansPreview() {
   );
 }
 
-function MobileMenu() {
+function MobileMenu({ user }) {
   const [open, setOpen] = useState(false);
 
   // Esc pour fermer
@@ -266,7 +340,11 @@ function MobileMenu() {
         >
           <div className="flex items-center justify-between">
             <span className="font-extrabold text-lg">Menu</span>
-            <button onClick={() => setOpen(false)} className="h-9 w-9 rounded-lg bg-gray-100" title="Fermer">
+            <button
+              onClick={() => setOpen(false)}
+              className="h-9 w-9 rounded-lg bg-gray-100"
+              title="Fermer"
+            >
               ✕
             </button>
           </div>
@@ -281,6 +359,45 @@ function MobileMenu() {
             <a href="#faq" onClick={() => setOpen(false)} className="block font-semibold text-gray-900">
               Ressources / FAQ
             </a>
+
+            <Link
+              to="/audit"
+              onClick={() => setOpen(false)}
+              className="block font-semibold text-gray-900"
+            >
+              Free Audit
+            </Link>
+
+            {/* ✅ Auth CTA mobile : Connexion OU Mon espace */}
+            {!user ? (
+              <>
+                <Link
+                  to="/login"
+                  onClick={() => setOpen(false)}
+                  className="px-3 py-2 text-sm font-semibold text-gray-700 hover:text-gray-900"
+                >
+                  Se connecter
+                </Link>
+
+                <Link
+                  to="/signup"
+                  onClick={() => setOpen(false)}
+                  className="inline-flex items-center justify-center w-full px-5 py-3 rounded-xl font-semibold text-white shadow-sm hover:opacity-90 transition"
+                  style={{ backgroundImage: BRAND_GRADIENT }}
+                >
+                  Créer un compte
+                </Link>
+              </>
+            ) : (
+              <Link
+                to="/app"
+                onClick={() => setOpen(false)}
+                className="inline-flex items-center justify-center w-full px-5 py-3 rounded-xl font-semibold text-white shadow-sm hover:opacity-90 transition"
+                style={{ backgroundImage: BRAND_GRADIENT }}
+              >
+                Mon espace
+              </Link>
+            )}
 
             <Link
               to="/tarifs"

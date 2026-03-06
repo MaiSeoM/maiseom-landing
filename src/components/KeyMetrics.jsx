@@ -35,9 +35,9 @@ const METRICS = [
   },
   {
     label: "Temps économisé",
-    note: "Tâches SEO automatisées / mois",
-    value: 6,
-    suffix: "h",
+    note: "Par mois / Par domaine",
+    value: "6 à 12h",
+    isText: true,
     gradient: "from-amber-500 to-orange-500",
   },
   {

@@ -89,3 +89,48 @@ export function trackPageView(path = "/") {
 export function trackEvent(name, params = {}) {
   g("event", name, params);
 }
+
+/* =========================================================
+   Autotracking des CTA via data-attributes (optionnel)
+   ---------------------------------------------------------
+   - À activer après consentement : enableCtaAutotrack()
+   - À utiliser sur un bouton/lien :
+       <button data-cta="rejoindre_beta" data-cta-loc="hero">…</button>
+       <a href="/tarifs" data-cta="see_pricing" data-cta-loc="header">…</a>
+   - Enverra : event 'cta_click' avec {label, location?, extra?}
+   ========================================================= */
+export function enableCtaAutotrack() {
+  if (window.__ctaAutotrack) return; // évite double binding
+  window.__ctaAutotrack = true;
+
+  document.addEventListener(
+    "click",
+    (e) => {
+      const el = e.target && e.target.closest ? e.target.closest("[data-cta]") : null;
+      if (!el) return;
+
+      const label = el.getAttribute("data-cta") || "cta";
+      const location = el.getAttribute("data-cta-loc") || null;
+      const extra = el.getAttribute("data-cta-extra") || null;
+
+      const params = { label };
+      if (location) params.location = location;
+      if (extra) params.extra = extra;
+
+      try {
+        trackEvent("cta_click", params);
+      } catch { /* empty */ }
+    },
+    { capture: true }
+  );
+}
+
+/* =========================================================
+   Debug mode (facultatif)
+   ---------------------------------------------------------
+   - Active le DebugView GA4 en local : enableGaDebug()
+   - À appeler avant initAnalytics() si besoin
+   ========================================================= */
+export function enableGaDebug() {
+  g("set", "debug_mode", true);
+}
