@@ -7,14 +7,14 @@ const PLANS = [
     key: "starter",
     name: "Starter",
     price: "19€/mois",
-    priceId: "price_1SqDXBRrDyU3qBDhXq3fCvQz",
+    priceId: "price_1T85s8Rzp6jZEiYJn9mTIBul",
     bullets: ["1 domaine", "Quota Starter", "Recommandations basiques"],
   },
   {
     key: "pro",
     name: "Pro",
     price: "49€/mois",
-    priceId: "price_1SqE2qRrDyU3qBDhcMhZDkg7",
+    priceId: "price_1T85s9Rzp6jZEiYJfSbvgSq0",
     bullets: ["1 domaine", "Quota Pro", "Automations + PDF"],
     featured: true,
   },
@@ -32,6 +32,21 @@ export default function BillingPage() {
       setReferralCode(savedCode);
     }
   }, []);
+
+async function handleLogout() {
+  try {
+    await supabase.auth.signOut();
+
+    // nettoyage stockage local
+    localStorage.removeItem("maiseom_selected_plan");
+    localStorage.removeItem("maiseom_referral_code");
+    sessionStorage.clear();
+
+    window.location.href = "/";
+  } catch (e) {
+    console.error("Logout error:", e);
+  }
+}
 
   async function goCheckout(planKey, priceId) {
     setErr("");
@@ -108,9 +123,18 @@ export default function BillingPage() {
     <div className="min-h-screen bg-slate-50 px-4 py-10">
       <div className="mx-auto max-w-4xl">
         <div className="rounded-3xl bg-white p-6 shadow-sm ring-1 ring-slate-200">
-          <h1 className="text-2xl font-extrabold text-slate-900">
-            Activer votre abonnement
-          </h1>
+          <div className="flex items-center justify-between">
+  <h1 className="text-2xl font-extrabold text-slate-900">
+    Activer votre abonnement
+  </h1>
+
+  <button
+    onClick={handleLogout}
+    className="text-xs font-semibold text-slate-600 hover:text-slate-900 underline"
+  >
+    Se déconnecter
+  </button>
+</div>
           <p className="mt-2 text-sm text-slate-600">
             Choisissez votre plan. Paiement sécurisé (Stripe). Accès immédiat
             après validation.

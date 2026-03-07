@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../../auth/AuthContext.jsx";
 import { supabase } from "../../supabaseClient.js";
-import { startCheckout } from "../../lib/billing.js";
 
 const WORKSPACE_SAVE_ENDPOINT = import.meta.env.VITE_API_WORKSPACE_SAVE;
 
@@ -20,12 +19,12 @@ const Signup = () => {
   const [clientCompany, setClientCompany] = useState("");
   const [domain, setDomain] = useState("");
 
-  const [plan, setPlan] = useState("Starter"); // ⭐ plan choisi au signup
+  const [plan, setPlan] = useState("Starter");
 
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // ✅ Si l'utilisateur vient d'un clic "Choisir Starter/Pro", on pré-sélectionne le plan
+  // Pré-sélection du plan si l'utilisateur vient d'un clic sur un bouton tarif
   useEffect(() => {
     const selectedPlan = localStorage.getItem("maiseom_selected_plan");
     if (selectedPlan === "Starter" || selectedPlan === "Pro") {
@@ -45,10 +44,10 @@ const Signup = () => {
     try {
       setLoading(true);
 
-      // 1) Création du compte Supabase (auth)
+      // 1) Création du compte
       await signUp({ email, password });
 
-      // 2) Récupérer userId
+      // 2) Récupérer l'utilisateur connecté
       const {
         data: { user },
       } = await supabase.auth.getUser();
@@ -61,7 +60,7 @@ const Signup = () => {
           clientLastName: clientLastName.trim() || null,
           clientCompany: clientCompany.trim() || null,
           email: email.trim(),
-          plan, // ⭐ plan choisi
+          plan,
           userId: user?.id || null,
         };
 
@@ -76,22 +75,14 @@ const Signup = () => {
         }
       }
 
-      // ✅ 4) AUTOPAY après signup si on vient d’un clic "Choisir Starter/Pro"
+      // 4) Si un plan a été choisi avant signup -> passer par /app/billing
       const selectedPlan = localStorage.getItem("maiseom_selected_plan");
       if (selectedPlan === "Starter" || selectedPlan === "Pro") {
-        // anti double-call (évite des ouvertures multiples)
-        const key = `maiseom_autopay_after_signup_${selectedPlan}`;
-        if (sessionStorage.getItem(key) !== "1") {
-          sessionStorage.setItem(key, "1");
-          localStorage.removeItem("maiseom_selected_plan");
-
-          // Ouvre Stripe Checkout (redirige la page)
-          await startCheckout(selectedPlan);
-          return;
-        }
+        navigate("/app/billing", { replace: true });
+        return;
       }
 
-      // ✅ 5) Sinon, comportement normal : aller sur Mon Espace
+      // 5) Sinon -> comportement normal
       navigate("/app/mon-espace", { replace: true });
     } catch (e) {
       console.error(e);
@@ -114,7 +105,6 @@ const Signup = () => {
         </p>
 
         <form onSubmit={handleSubmit} className="mt-5 space-y-4 text-sm">
-          {/* Compte */}
           <div className="space-y-1.5">
             <label className="block text-sm font-medium text-slate-900">
               Email (compte)
@@ -153,7 +143,6 @@ const Signup = () => {
             </p>
           </div>
 
-          {/* Plan au moment de la création */}
           <div className="space-y-1.5">
             <label className="block text-sm font-medium text-slate-900">
               Plan choisi
@@ -180,7 +169,6 @@ const Signup = () => {
             </p>
           </div>
 
-          {/* Profil / Entreprise */}
           <div className="grid gap-3 md:grid-cols-2">
             <div className="space-y-1.5">
               <label className="block text-sm font-medium text-slate-900">

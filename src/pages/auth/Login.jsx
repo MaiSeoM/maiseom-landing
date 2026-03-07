@@ -19,38 +19,36 @@ const Login = () => {
   const from = location.state?.from?.pathname || "/app/mon-espace";
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
-  setError("");
+    e.preventDefault();
+    setError("");
 
-  if (!email || !password) {
-    setError("Merci de renseigner un email et un mot de passe.");
-    return;
-  }
-
-  try {
-    setLoading(true);
-    await signIn({ email, password });
-
-    // ✅ Si un plan avait été choisi avant login (pricing CTA)
-    const selectedPlan = localStorage.getItem("maiseom_selected_plan");
-    if (selectedPlan) {
-      localStorage.removeItem("maiseom_selected_plan");
-      window.location.href =
-        "/tarifs?autopay=1&plan=" + encodeURIComponent(selectedPlan);
+    if (!email || !password) {
+      setError("Merci de renseigner un email et un mot de passe.");
       return;
     }
 
-    // ✅ Sinon: redirection premium (abonné => /app, sinon => /app/billing)
-    // On laisse BillingGate décider proprement.
-    window.location.href = "/app";
-  } catch (e) {
-    console.error(e);
-    setError(e.message || "Impossible de se connecter pour le moment. Réessayez.");
-  } finally {
-    setLoading(false);
-  }
-};
+    try {
+      setLoading(true);
+      await signIn({ email, password });
 
+      // ✅ Si un plan avait été choisi avant login -> passer par /app/billing
+      const selectedPlan = localStorage.getItem("maiseom_selected_plan");
+      if (selectedPlan === "Starter" || selectedPlan === "Pro") {
+        window.location.href = "/app/billing";
+        return;
+      }
+
+      // ✅ Sinon comportement normal
+      window.location.href = "/app";
+    } catch (e) {
+      console.error(e);
+      setError(
+        e.message || "Impossible de se connecter pour le moment. Réessayez."
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-slate-50 flex items-center justify-center px-4">
